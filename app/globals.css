@@ -49,3 +49,10 @@
 .dialog-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
 @media(max-width:1050px){.services-grid-six{grid-template-columns:1fr 1fr}.projects-grid{grid-template-columns:1fr 1fr}.stats-grid{grid-template-columns:1fr 1fr}.trust-grid{grid-template-columns:1fr 1fr}.maps-rating{justify-self:start}}
 @media(max-width:700px){.homelane-hero{top:23%}.hero-actions{gap:8px}.hero-actions .pill{font-size:12px;padding:11px 16px}.rating-chip{margin-top:14px}.stats-grid{grid-template-columns:1fr 1fr;margin-top:40px}.stats-grid article{padding:22px 17px}.services-grid-six{grid-template-columns:1fr}.service-card-photo{min-height:470px}.projects-grid{grid-template-columns:1fr;gap:30px;margin-top:42px}.project-tile-image{aspect-ratio:1.15}.project-tile-image>span{opacity:1;transform:none}.trust-grid{grid-template-columns:1fr 1fr;gap:10px}.trust-grid article{padding:24px 18px}.testimonial-head{grid-template-columns:1fr}.maps-rating{justify-self:start}.studio-buttons{flex-direction:column;align-items:flex-start}.location-facts p{font-size:14px!important}.facility-row{gap:6px}.facility-row span{font-size:9px}.homelane-wordmark{font-size:21vw}}
+
+
+/* Restored video-inspired flow + onsite booking */
+.booking-dialog{width:min(620px,calc(100vw - 28px))!important}.booking-ready{display:grid;gap:16px;justify-items:start;padding-top:4px}.booking-ready>svg{color:#72795a}.booking-ready p{font-size:14px;line-height:1.75;color:#62665a;margin:0}.booking-ready .pill{margin:0}
+.category-row>.pill{pointer-events:none}
+.story-sticky h2{max-width:1050px}
+@media(max-width:700px){.booking-dialog{width:calc(100vw - 24px)!important}.booking-ready{gap:13px}.booking-ready .pill{white-space:normal;text-align:center}.story-section{height:280svh}}
