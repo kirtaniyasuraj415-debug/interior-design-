@@ -1,5 +1,5 @@
-export function database(): any {
-  throw new Error(
-    "Persistent database storage is not configured for this Vercel deployment."
-  );
+import { env } from "cloudflare:workers";
+export function database() {
+  if (!env.DB) throw new Error("Database binding is unavailable");
+  return env.DB;
 }
