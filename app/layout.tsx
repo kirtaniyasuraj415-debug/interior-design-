@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Furnt — Designed to Fit Your Life",
-  description: "Timeless wooden furniture, thoughtful craftsmanship, and interiors made for the way you live. Discover the Furnt collection.",
+  title: "HomeLane Park Street Kolkata | Interior Design Studio",
+  description: "HomeLane Park Street, Kolkata — end-to-end home interiors, modular kitchens, wardrobes, 3D design, transparent pricing and installation.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "https://super.homelane.com/hlico4.ico",
+    shortcut: "https://super.homelane.com/hlico4.ico",
   },
 };
 
