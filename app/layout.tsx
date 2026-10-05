@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "HomeLane Park Street Kolkata | Interior Design Studio",
-  description: "HomeLane Park Street, Kolkata — end-to-end home interiors, modular kitchens, wardrobes, 3D design, transparent pricing and installation.",
+  title: "Creative Interiorz | Interior Designer in Manikonda, Hyderabad",
+  description: "Creative Interiorz — modular kitchens, wardrobes, false ceilings, TV units, custom furniture and interior finishes in Manikonda, Hyderabad.",
   icons: {
-    icon: "https://super.homelane.com/hlico4.ico",
-    shortcut: "https://super.homelane.com/hlico4.ico",
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
   },
 };
 
