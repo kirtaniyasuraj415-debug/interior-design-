@@ -20,12 +20,12 @@ const images = {
 const stats = [["4.8/5", "Google rating"], ["72", "Google reviews"], ["24 hours", "Listed hours"], ["Hyderabad", "Manikonda studio"]];
 
 const services = [
-  { title: "Modular Kitchens", icon: LampDesk, image: images.kitchen, text: "Kitchen planning and modular cabinetry, listed at the Creative Interiorz studio." },
-  { title: "Wardrobes", icon: CheckCircle2, image: images.wardrobe, text: "Wardrobe and storage solutions shown among the studio’s listed interior services." },
-  { title: "False Ceilings", icon: Leaf, image: images.living, text: "False-ceiling and lighting-focused interior work for a more finished room." },
-  { title: "TV Units", icon: Sofa, image: images.hero, text: "Custom TV-unit and entertainment-wall detailing for living spaces." },
-  { title: "Custom Furniture", icon: HeartHandshake, image: images.living, text: "Customised furniture support for home interiors and everyday use." },
-  { title: "Wall Panels & Finishes", icon: CheckCircle2, image: images.hero, text: "PVC panelling, wallpapers, glass and SS-railing work listed at the studio." },
+  { title: "Modular Kitchens", icon: LampDesk, image: images.kitchen, imageClass: "service-image-kitchen", text: "Kitchen planning and modular cabinetry, listed at the Creative Interiorz studio." },
+  { title: "Wardrobes", icon: CheckCircle2, image: images.hero, imageClass: "service-image-feature", text: "Wardrobe and storage solutions shown among the studio’s listed interior services." },
+  { title: "False Ceilings", icon: Leaf, image: images.living, imageClass: "service-image-light", text: "False-ceiling and lighting-focused interior work for a more finished room." },
+  { title: "TV Units", icon: Sofa, image: images.hero, imageClass: "service-image-tv", text: "Custom TV-unit and entertainment-wall detailing for living spaces." },
+  { title: "Custom Furniture", icon: HeartHandshake, image: images.living, imageClass: "service-image-furniture", text: "Customised furniture support for home interiors and everyday use." },
+  { title: "Wall Panels & Finishes", icon: CheckCircle2, image: images.hero, imageClass: "service-image-panel", text: "PVC panelling, wallpapers, glass and SS-railing work listed at the studio." },
 ];
 
 const projects = [
@@ -110,8 +110,51 @@ export default function Home() {
       }
     }), { threshold: 0.13 });
     node.querySelectorAll("[data-reveal]").forEach((element) => observer.observe(element));
+
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const story = node.querySelector<HTMLElement>(".story-section");
+    const floatingPhotos = Array.from(node.querySelectorAll<HTMLElement>(".story-photo"));
+    let animationFrame = 0;
+
+    const updateStoryPhotos = () => {
+      animationFrame = 0;
+      if (!story) return;
+      const bounds = story.getBoundingClientRect();
+      const scrollableDistance = Math.max(1, bounds.height - window.innerHeight);
+      const progress = Math.max(0, Math.min(1, -bounds.top / scrollableDistance));
+
+      floatingPhotos.forEach((photo, index) => {
+        if (motionPreference.matches) {
+          photo.style.transform = "none";
+          photo.style.opacity = "1";
+          return;
+        }
+
+        const photoProgress = (progress - index * 0.115) / 0.33;
+        const visibility = Math.max(0, Math.min(1, photoProgress * 3.4, (1.22 - photoProgress) * 3.4));
+        const travel = window.innerHeight * (0.95 - photoProgress * 1.42);
+        photo.style.transform = `translate3d(0, ${Math.round(travel)}px, 0)`;
+        photo.style.opacity = String(visibility);
+      });
+    };
+
+    const scheduleStoryUpdate = () => {
+      if (!animationFrame) animationFrame = window.requestAnimationFrame(updateStoryPhotos);
+    };
+
     node.classList.add("motion-ready");
-    return () => observer.disconnect();
+    updateStoryPhotos();
+    window.addEventListener("scroll", scheduleStoryUpdate, { passive: true });
+    window.addEventListener("resize", scheduleStoryUpdate);
+    motionPreference.addEventListener("change", scheduleStoryUpdate);
+
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", scheduleStoryUpdate);
+      window.removeEventListener("resize", scheduleStoryUpdate);
+      motionPreference.removeEventListener("change", scheduleStoryUpdate);
+    };
   }, []);
 
   return <div ref={root}>
@@ -144,7 +187,7 @@ export default function Home() {
 
       <section className="services-section section-wrap" id="services" aria-labelledby="services-title">
         <div className="section-heading" data-reveal><span className="eyebrow">Services shown at the studio</span><h2 id="services-title">Interior solutions for the rooms you use every day</h2><p>Explore the interior services displayed at the Creative Interiorz Manikonda studio.</p></div>
-        <div className="services-grid services-grid-six">{services.map((service, index) => <article className="service-card service-card-photo" data-reveal style={{ "--delay": String(index * 70) + "ms" } as CSSProperties} key={service.title}><div className="service-photo"><Photo src={service.image} alt={service.title} /></div><span className="service-number">0{index + 1}</span><service.icon size={42} strokeWidth={1.15} /><h3>{service.title}</h3><p>{service.text}</p><button className="service-link" onClick={() => openContact(service.title)}>Discuss this service <ArrowUpRight size={16} /></button></article>)}</div>
+        <div className="services-grid services-grid-six">{services.map((service, index) => <article className="service-card service-card-photo" data-reveal style={{ "--delay": String(index * 70) + "ms" } as CSSProperties} key={service.title}><div className="service-photo"><Photo src={service.image} alt={service.title} className={service.imageClass} /></div><span className="service-number">0{index + 1}</span><service.icon size={42} strokeWidth={1.15} /><h3>{service.title}</h3><p>{service.text}</p><button className="service-link" onClick={() => openContact(service.title)}>Discuss this service <ArrowUpRight size={16} /></button></article>)}</div>
       </section>
 
       <section className="craft-section studio-approach" aria-label="Creative Interiorz work">
@@ -158,7 +201,7 @@ export default function Home() {
         <div className="carousel-controls"><button aria-label="Previous projects" disabled={railIndex < 2} onClick={() => moveRail(-1)}><ChevronLeft size={21} /></button><button aria-label="Next projects" onClick={() => moveRail(1)}><ChevronRight size={21} /></button></div>
       </section>
 
-      <section className="story-section" aria-labelledby="story-title"><div className="story-sticky"><h2 id="story-title">The details come together<br className="desktop-break" /> when storage, finishes, lighting<br className="desktop-break" /> and room flow are planned as one.</h2>{[images.hero, images.kitchen, images.living, images.wardrobe, images.kitchen, images.hero].map((src, index) => <div className={"story-photo story-photo-" + index} key={src + String(index)}><Photo src={src} alt="Creative Interiorz project detail" /></div>)}</div></section>
+      <section className="story-section" aria-labelledby="story-title"><div className="story-sticky"><h2 id="story-title">The details come together<br className="desktop-break" /> when storage, finishes, lighting<br className="desktop-break" /> and room flow are planned as one.</h2>{[images.hero, images.kitchen, images.living, images.hero, images.kitchen, images.living].map((src, index) => <div className={"story-photo story-photo-" + index} key={src + String(index)}><Photo src={src} alt="Creative Interiorz project detail" /></div>)}</div></section>
 
       <section className="process-section" id="process" aria-labelledby="process-title"><div className="section-wrap"><div className="process-head" data-reveal><div><span className="eyebrow">Getting started</span><h2 id="process-title">A simple route from enquiry to your interiors</h2></div><p>These are practical steps for starting a conversation with the Creative Interiorz studio. Confirm project details, scope and timelines directly with the team.</p></div><div className="process-grid">{process.map(([number, title, text], index) => <article className="process-step" data-reveal style={{ "--delay": String(index * 60) + "ms" } as CSSProperties} key={title}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
